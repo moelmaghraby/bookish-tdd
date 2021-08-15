@@ -1,7 +1,9 @@
 const jsonServer = require('json-server')
+const path = require('path')
 const server = jsonServer.create()
-const router = jsonServer.router('./db.json')
+const router = jsonServer.router(path.join(__dirname, 'db.json'))
 const middlewares = jsonServer.defaults()
+
 server.use((req, res, next) => {
   if (req.method === 'DELETE' && req.query['_cleanup']) {
     const db = router.db
