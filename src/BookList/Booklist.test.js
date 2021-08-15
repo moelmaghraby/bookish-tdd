@@ -1,12 +1,19 @@
 import React from 'react'
 import {render} from '@testing-library/react'
 import BookList from './BookList';
+import {MemoryRouter as Router} from 'react-router-dom';
+
+const renderWithRouter = (component) => {
+    return {...render(<Router>
+        {component}
+      </Router>)}
+  };
 describe('BookList', () => {
   it('loading', () => {
     const props = {
       loading: true
     };
-    const {container} = render(<BookList {...props} />)
+    const {container} = renderWithRouter(<BookList {...props} />)
     const content = container.querySelector('p');
     expect(content.innerHTML).toContain('Loading');
   });
@@ -15,7 +22,7 @@ describe('BookList', () => {
       const props = {
           error:true
       }
-    const {container} = render(<BookList {...props} />)
+    const {container} = renderWithRouter(<BookList {...props} />)
     const content = container.querySelector('p');
     expect(content.innerHTML).toContain('Error');
   })
@@ -27,9 +34,10 @@ describe('BookList', () => {
           { 'name': 'Domain-driven design', 'id': 2 },
         ]
       };
-      const { container } = render(<BookList {...props} />);
+      const { container } = renderWithRouter(<BookList {...props} />);
 
-      const titles = [...container.querySelectorAll('h2.title')].map(x => x.innerHTML);
+      const titles = [...container.querySelectorAll('h2')].map(x => x.innerHTML);
       expect(titles).toEqual(['Refactoring','Domain-driven design'])
   })
+  
 });
